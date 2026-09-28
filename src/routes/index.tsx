@@ -151,7 +151,7 @@ function Dock({ visible }: { visible: boolean }) {
     className="fixed bottom-4 left-1/2 z-50 -translate-x-1/2 md:bottom-6"
     initial={reduce ? false : { opacity: 0, y: 24, scale: .96 }}
     animate={{ opacity: 1, y: 0, scale: 1 }}
-    exit={reduce ? undefined : { opacity: 0, y: 24, scale: .96 }}
+    exit={reduce ? { opacity: 0 } : { opacity: 0, y: 24, scale: .96 }}
     transition={{ duration: .4, ease: [0.22, 1, 0.36, 1] }}
   >
     <div className="flex items-center gap-1.5 rounded-full border border-primary-foreground/10 bg-primary/95 p-1.5 pl-2.5 text-primary-foreground shadow-2xl backdrop-blur-xl sm:gap-2 sm:pl-3">
