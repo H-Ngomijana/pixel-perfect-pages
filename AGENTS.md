@@ -8,3 +8,5 @@
 > Commits you push to the connected branch sync back to Lovable and show up in
 > the editor, so keep the branch in a working state.
 <!-- LOVABLE:END -->
+
+- The public experience is a single scrolling portfolio at `/`; section navigation uses in-page anchors to preserve the requested storefront composition.
