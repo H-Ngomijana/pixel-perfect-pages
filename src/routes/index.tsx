@@ -145,8 +145,26 @@ function Footer() {
   return <footer className="dark-grid bg-primary pb-36 pt-28 text-primary-foreground md:pt-40"><div className="mx-auto max-w-[1400px] px-5 md:px-10"><Reveal><p className="font-mono text-xs uppercase text-accent">Have a project in mind?</p><div className="mt-7 flex flex-col justify-between gap-10 border-b border-primary-foreground/15 pb-20 lg:flex-row lg:items-end"><h2 className="max-w-5xl font-display text-[clamp(4.5rem,11vw,10rem)] uppercase leading-[.82]">Let's Build Something.</h2><Button asChild variant="dock" size="lg"><a href="mailto:hello@jhdigitals.com">Start a conversation <ArrowRight className="size-4" /></a></Button></div></Reveal><div className="grid gap-10 pt-12 md:grid-cols-3"><Brand inverted /><div className="flex flex-wrap gap-6 font-mono text-[10px] uppercase text-muted-foreground">{nav.map(([l,h])=><a key={l} href={h} className="hover:text-accent">{l}</a>)}</div><div className="md:text-right"><a href="mailto:hello@jhdigitals.com" className="text-sm hover:text-accent">hello@jhdigitals.com</a><p className="mt-4 font-mono text-[9px] uppercase text-muted-foreground"><span className="mr-2 inline-block size-2 rounded-full bg-success" />Systems online · Kigali / Worldwide</p></div></div></div></footer>;
 }
 
-function Dock() {
-  return <div className="fixed bottom-4 left-1/2 z-50 flex -translate-x-1/2 items-center gap-2 rounded-full border border-primary-foreground/10 bg-primary/90 p-2 text-primary-foreground shadow-2xl backdrop-blur-xl md:bottom-6 md:gap-5 md:px-3"><div className="hidden md:block"><Brand inverted /></div><nav className="flex items-center gap-1 md:gap-4">{nav.map(([l,h])=><a key={l} href={h} className="hidden px-1 text-xs text-muted-foreground transition-colors hover:text-primary-foreground sm:block">{l}</a>)}</nav><Button asChild variant="dock" className="h-10 px-5"><a href="mailto:hello@jhdigitals.com">Connect</a></Button><a href="#top" aria-label="Back to top" className="grid size-10 place-items-center rounded-full border border-primary-foreground/15 text-muted-foreground hover:text-accent"><Plus className="size-4" /></a></div>;
+function Dock({ visible }: { visible: boolean }) {
+  const reduce = useReducedMotion();
+  return <AnimatePresence>{visible && <motion.div
+    className="fixed bottom-4 left-1/2 z-50 -translate-x-1/2 md:bottom-6"
+    initial={reduce ? false : { opacity: 0, y: 24, scale: .96 }}
+    animate={{ opacity: 1, y: 0, scale: 1 }}
+    exit={reduce ? undefined : { opacity: 0, y: 24, scale: .96 }}
+    transition={{ duration: .4, ease: [0.22, 1, 0.36, 1] }}
+  >
+    <div className="flex items-center gap-1.5 rounded-full border border-primary-foreground/10 bg-primary/95 p-1.5 pl-2.5 text-primary-foreground shadow-2xl backdrop-blur-xl sm:gap-2 sm:pl-3">
+      <a href="#top" className="group flex shrink-0 items-center gap-2" aria-label="JH Digitals home">
+        <span className="grid size-7 place-items-center border border-primary-foreground/50 font-mono text-[9px] font-bold leading-none transition-colors group-hover:border-accent group-hover:text-accent">JH</span>
+        <span className="hidden font-display text-base uppercase leading-none tracking-wide sm:block">Digitals</span>
+      </a>
+      <span className="mx-0.5 hidden h-5 w-px bg-primary-foreground/15 sm:block" />
+      <nav className="hidden items-center sm:flex">{nav.map(([l,h])=><a key={l} href={h} className="rounded-full px-2.5 py-1.5 font-mono text-[10px] font-semibold uppercase leading-none tracking-wide text-muted-foreground transition-colors hover:bg-primary-foreground/10 hover:text-primary-foreground">{l}</a>)}</nav>
+      <Button asChild variant="dock" className="h-8 shrink-0 rounded-full px-4 font-mono text-[10px] font-semibold uppercase tracking-wide"><a href="mailto:hello@jhdigitals.com">Connect</a></Button>
+      <a href="#top" aria-label="Back to top" className="grid size-8 shrink-0 place-items-center rounded-full border border-primary-foreground/15 text-muted-foreground transition-colors hover:border-accent hover:text-accent"><Plus className="size-3.5" /></a>
+    </div>
+  </motion.div>}</AnimatePresence>;
 }
 
 function TrustBand() {
