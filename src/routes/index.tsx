@@ -172,5 +172,6 @@ function TrustBand() {
 }
 
 function HomePage() {
-  return <main><Header /><Hero /><TrustBand /><TechStack /><Work /><Services /><Pricing /><Footer /><Dock /></main>;
+  const headerHidden = useHeaderVisibility();
+  return <main><Header hidden={headerHidden} /><Hero /><TrustBand /><TechStack /><Work /><Services /><Pricing /><Footer /><Dock visible={headerHidden} /></main>;
 }
