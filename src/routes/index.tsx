@@ -78,10 +78,29 @@ function StatusBadge({ dark = false }: { dark?: boolean }) {
   return <div className={`inline-flex items-center gap-3 rounded-full border px-4 py-2 font-mono text-[10px] font-semibold uppercase md:text-xs ${dark ? "border-primary-foreground/15 bg-primary/80 text-primary-foreground" : "border-foreground/15 bg-background/80 text-foreground"}`}><span className="relative flex size-2.5"><span className="absolute inline-flex size-full animate-ping rounded-full bg-success opacity-60" /><span className="relative inline-flex size-2.5 rounded-full bg-success" /></span>Accepting new projects <span className="text-accent">Q3 & Q4</span></div>;
 }
 
-function Header() {
+function useHeaderVisibility() {
+  const [hidden, setHidden] = useState(false);
+  const last = useRef(0);
+  useEffect(() => {
+    last.current = window.scrollY;
+    const onScroll = () => {
+      const y = window.scrollY;
+      const delta = y - last.current;
+      if (Math.abs(delta) > 6) {
+        setHidden(delta > 0 && y > 140);
+        last.current = y;
+      }
+    };
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => window.removeEventListener("scroll", onScroll);
+  }, []);
+  return hidden;
+}
+
+function Header({ hidden }: { hidden: boolean }) {
   const [open, setOpen] = useState(false);
   return <>
-    <header className="fixed inset-x-0 top-0 z-50 border-b border-foreground/10 bg-background/80 backdrop-blur-xl">
+    <header className={`fixed inset-x-0 top-0 z-50 border-b border-foreground/10 bg-background/80 backdrop-blur-xl transition-transform duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] ${hidden ? "-translate-y-full" : "translate-y-0"}`}>
       <div className="mx-auto flex h-20 max-w-[1500px] items-center justify-between px-5 md:px-10"><Brand /><nav className="hidden items-center gap-9 md:flex">{nav.map(([label, href]) => <a key={label} href={href} className="font-mono text-xs font-semibold uppercase transition-colors hover:text-accent">{label}</a>)}</nav><a href="mailto:hello@jhdigitals.com" className="hidden font-display text-2xl italic transition-colors hover:text-accent md:block">Connect ↗</a><Button variant="ghost" size="icon" className="md:hidden" onClick={() => setOpen(true)} aria-label="Open menu"><Menu /></Button></div>
     </header>
     <AnimatePresence>{open && <motion.div className="fixed inset-0 z-[70] flex flex-col bg-background p-6" initial={{ opacity: 0, y: -20 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -20 }}><div className="flex items-center justify-between"><Brand /><Button variant="ghost" size="icon" onClick={() => setOpen(false)} aria-label="Close menu"><X /></Button></div><nav className="my-auto flex flex-col gap-5">{nav.map(([label, href], i) => <motion.a key={label} href={href} onClick={() => setOpen(false)} className="border-b border-foreground/20 pb-3 font-display text-6xl uppercase" initial={{ opacity: 0, x: -20 }} animate={{ opacity: 1, x: 0 }} transition={{ delay: i * .07 }}>{label}</motion.a>)}</nav><a href="mailto:hello@jhdigitals.com" className="font-mono text-sm uppercase text-accent">hello@jhdigitals.com ↗</a></motion.div>}</AnimatePresence>
